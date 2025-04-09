@@ -1,6 +1,6 @@
 {
   "name": "com.rafaelcordoba.carousel",
-  "displayName": "Carousel",
+  "displayName": "com.rafaelcordoba.carousel",
   "author": { "name": "Rafael Cordoba", "url": "http://rafaelcordoba.com/" },
   "version": "1.0.0",
   "unity": "2018.4",
@@ -10,12 +10,6 @@
   "licensesUrl": "https://github.com/rafaelcordoba/Carousel/blob/master/LICENSE.md",
   "category": "UI",
   "dependencies": {
-  },
-  "samples": [
-    {
-      "displayName": "Carousel Sample",
-      "description": "Sample scene demonstrating the Carousel component.",
-      "path": "Samples"
-    }
-  ]
+    "com.unity.textmeshpro": "3.0.7"
+  }
 }

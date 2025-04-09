@@ -1,5 +1,13 @@
 {
   "dependencies": {
+    "com.rafaelcordoba.carousel": {
+      "version": "file:com.rafaelcordoba.carousel",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.textmeshpro": "3.0.7"
+      }
+    },
     "com.unity.burst": {
       "version": "1.8.18",
       "depth": 1,
