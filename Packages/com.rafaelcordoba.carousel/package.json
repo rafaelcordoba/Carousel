@@ -11,5 +11,12 @@
   "category": "UI",
   "dependencies": {
     "com.unity.textmeshpro": "3.0.7"
-  }
+  },
+  "samples": [
+    {
+      "displayName": "Basic Example",
+      "description": "Contains basic sample scene showing carousel functionality",
+      "path": "Samples~/BasicSample"
+    }
+  ]
 }
