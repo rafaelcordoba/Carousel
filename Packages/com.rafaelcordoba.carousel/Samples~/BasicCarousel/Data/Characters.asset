@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22a1dd7109ec4c77b31e7a736e2d3bfa, type: 3}
+  m_Name: Characters
+  m_EditorClassIdentifier: 
+  defaultPrefab: {fileID: 4126015621156640197, guid: 6186350dbae8c49ddb7e8ed6d787bb27, type: 3}
+  datas:
+  - customPrefab: {fileID: 0}
+    title: Rafael Cordoba
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
+      suscipit a quam at fermentum. Nulla auctor neque eget felis pulvinar pharetra
+      id quis justo. Aliquam erat volutpat. Suspendisse potenti. '
+  - customPrefab: {fileID: 660758592078293317, guid: a42cb8fc940764523978c448e24d89a7, type: 3}
+    title: SpongeBob
+    description: "The ever-optimistic sponge who lives in a pineapple under the sea.
+      SpongeBob brings boundless energy and a can-do attitude, no matter how absurd
+      the task. Whether he's flipping Krabby Patties or battling jellyfish, he\u2019s
+      always 100% in.  "
+  - customPrefab: {fileID: 0}
+    title: Batman
+    description: "The brooding protector of Gotham, Batman uses his intellect, gadgets,
+      and martial arts skills to fight crime. A symbol of justice and determination,
+      he never backs down \u2014 even without superpowers."
+  - customPrefab: {fileID: 660758592078293317, guid: a42cb8fc940764523978c448e24d89a7, type: 3}
+    title: Lara Croft
+    description: "An adventurous archaeologist with a knack for uncovering ancient
+      mysteries. Lara is resourceful, fearless, and deadly accurate with her dual
+      pistols. She\u2019s the definition of cool under pressure."
+  - customPrefab: {fileID: 0}
+    title: Shrek
+    description: " grumpy ogre with a heart of gold, Shrek just wants to be left
+      alone in his swamp \u2014 until adventure (and annoying sidekicks) find him.
+      Surprisingly wise and brave when it counts."
+  - customPrefab: {fileID: 0}
+    title: Mario
+    description: "Nintendo\u2019s mustached plumber hero, always ready to jump, stomp,
+      and power-up his way to rescue Princess Peach. His mix of cheerfulness and
+      resilience makes him instantly likable.  "
+  - customPrefab: {fileID: 0}
+    title: Wednesday Addams
+    description: "Dark, clever, and always unimpressed, Wednesday sees the world
+      through a gothic lens. She\u2019s a master of deadpan humor and surprisingly
+      effective in tight situations.  "
+  - customPrefab: {fileID: 0}
+    title: Darth Vader
+    description: "Once a Jedi, now the face of the Empire. Vader\u2019s towering
+      presence and booming voice make him intimidating, but there\u2019s still a
+      trace of humanity behind the mask.  "
+  - customPrefab: {fileID: 0}
+    title: Wolverine
+    description: "Grizzled, tough, and virtually unkillable thanks to his healing
+      powers and adamantium claws. Wolverine doesn\u2019t talk much, but when he
+      acts \u2014 things get done.  "
+  - customPrefab: {fileID: 0}
+    title: Barbie
+    description: "More than just a fashion icon, Barbie has been everything from
+      astronaut to doctor to president. She\u2019s versatile, confident, and always
+      ready to lead with style and smarts.  "

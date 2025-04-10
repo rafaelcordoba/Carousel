@@ -1,0 +1,17 @@
+{
+    "name": "carousel.sample",
+    "rootNamespace": "Carousel.Samples",
+    "references": [
+        "Unity.TextMeshPro",
+        "carousel.runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
