@@ -29,18 +29,33 @@ jobs:
           
           # Check if any files in Assets/Carousel were changed
           if echo "$CHANGED_FILES" | grep -q "^Assets/Carousel/"; then
-            echo "changes_detected=true" >> $GITHUB_OUTPUT
+            echo "samples_changes_detected=true" >> $GITHUB_OUTPUT
           else
-            echo "changes_detected=false" >> $GITHUB_OUTPUT
+            echo "samples_changes_detected=false" >> $GITHUB_OUTPUT
+          fi
+          
+          # Check if any files in Packages/com.rafaelcordoba.carousel were changed
+          if echo "$CHANGED_FILES" | grep -q "^Packages/com.rafaelcordoba.carousel/"; then
+            echo "package_changes_detected=true" >> $GITHUB_OUTPUT
+          else
+            echo "package_changes_detected=false" >> $GITHUB_OUTPUT
+          fi
+          
+          # Determine if we should bump the version
+          if [[ "${{ steps.check_changes.outputs.samples_changes_detected }}" == "true" || "${{ steps.check_changes.outputs.package_changes_detected }}" == "true" ]]; then
+            echo "should_bump_version=true" >> $GITHUB_OUTPUT
+          else
+            echo "should_bump_version=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Copy samples
-        if: steps.check_changes.outputs.changes_detected == 'true'
+        if: steps.check_changes.outputs.samples_changes_detected == 'true'
         run: |
           mkdir -p Packages/com.rafaelcordoba.carousel/Samples~/BasicCarousel
           cp -r Assets/Carousel/* Packages/com.rafaelcordoba.carousel/Samples~/BasicCarousel/
           
       - name: Update package version
+        if: steps.check_changes.outputs.should_bump_version == 'true'
         run: |
           # Get current version from package.json
           CURRENT_VERSION=$(grep -o '"version": "[^"]*"' Packages/com.rafaelcordoba.carousel/package.json | cut -d'"' -f4)
@@ -61,8 +76,9 @@ jobs:
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
           
       - name: Commit changes
+        if: steps.check_changes.outputs.should_bump_version == 'true'
         run: |
-          if [ "${{ steps.check_changes.outputs.changes_detected }}" == "true" ]; then
+          if [ "${{ steps.check_changes.outputs.samples_changes_detected }}" == "true" ]; then
             git add Packages/com.rafaelcordoba.carousel/Samples~ Packages/com.rafaelcordoba.carousel/package.json
             git commit -m "updating samples and bumping version to $NEW_VERSION"
           else
