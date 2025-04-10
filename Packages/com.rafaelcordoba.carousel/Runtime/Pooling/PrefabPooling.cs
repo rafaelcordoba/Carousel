@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Carousel.Runtime.Pooling
 {
-    public class PrefabPooling
+    public class PrefabPooling : IDisposable
     {
         private const int MaxPoolSize = 3;
         private readonly Dictionary<GameObject, Transform> _containers = new();
@@ -13,8 +15,7 @@ namespace Carousel.Runtime.Pooling
         {
             if (!_containers.ContainsKey(prefab))
             {
-                var go = new GameObject($"Pool ({prefab.name})");
-                _containers.Add(prefab, go.transform);
+                _containers.Add(prefab, new GameObject($"Pool ({prefab.name})").transform);
             }
 
             var container = _containers[prefab];
@@ -45,6 +46,18 @@ namespace Carousel.Runtime.Pooling
             pool.Enqueue(poolObject);
             poolObject.Instance.transform.SetParent(container);
             poolObject.Instance.SetActive(false);
+        }
+
+        public void Dispose()
+        {
+            if (_containers == null) 
+                return;
+            
+            foreach (var container in _containers.Values)
+            {
+                if (container && container.gameObject) 
+                    Object.Destroy(container.gameObject);
+            }
         }
     }
 }

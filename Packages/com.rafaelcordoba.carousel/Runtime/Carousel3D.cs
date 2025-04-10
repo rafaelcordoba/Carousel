@@ -6,13 +6,13 @@ namespace Carousel.Runtime
 {
     public class Carousel3D : MonoBehaviour, ICarouselInputHandler
     {
-        public readonly List<AbstractItemView> ItemViews = new();
         private readonly Dictionary<int, AbstractItemView> _activeViews = new();
+        private readonly HashSet<int> _visibleIndices = new();
         private CarouselAnimator _animator;
+        private IReadOnlyList<CarouselItem> _items = new List<CarouselItem>();
         private PrefabPooling _pooling;
 
-        private IReadOnlyList<CarouselItem> _items = new List<CarouselItem>();
-        private readonly HashSet<int> _visibleIndices = new();
+        public List<AbstractItemView> ItemViews { get; } = new();
         public CarouselConfig Config { get; private set; }
         public int SelectedIndex { get; set; }
         public int DataCount => _items.Count;
@@ -21,6 +21,43 @@ namespace Carousel.Runtime
         {
             _animator = gameObject.AddComponent<CarouselAnimator>();
             _pooling = new PrefabPooling();
+        }
+
+        private void OnDestroy()
+        {
+            _pooling.Dispose();
+        }
+
+        public void Next()
+        {
+            if (SelectedIndex < DataCount - 1)
+                Select(SelectedIndex + 1);
+        }
+
+        public void Previous()
+        {
+            if (SelectedIndex > 0)
+                Select(SelectedIndex - 1);
+        }
+
+        public void First()
+        {
+            if (SelectedIndex > 0)
+                Select(0);
+        }
+
+        public void Last()
+        {
+            if (SelectedIndex < DataCount - 1)
+                Select(DataCount - 1);
+        }
+
+        public void Select(int index)
+        {
+            if (index >= 0 && index < DataCount && index != SelectedIndex)
+                _animator.StartAnimation(index);
+            else if (index < 0 || index >= DataCount)
+                Debug.LogError($"Invalid index {index}. Must be between 0 and {DataCount - 1}");
         }
 
         public void Initialize(CarouselConfig config, IReadOnlyList<CarouselItem> items, int selectedIndex)
@@ -80,26 +117,6 @@ namespace Carousel.Runtime
 
                 ItemViews.Add(itemView);
             }
-        }
-
-        public void Next()
-        {
-            if (SelectedIndex < DataCount - 1)
-                Select(SelectedIndex + 1);
-        }
-
-        public void Previous()
-        {
-            if (SelectedIndex > 0)
-                Select(SelectedIndex - 1);
-        }
-
-        public void Select(int index)
-        {
-            if (index >= 0 && index < DataCount && index != SelectedIndex)
-                _animator.StartAnimation(index);
-            else if (index < 0 || index >= DataCount)
-                Debug.LogError($"Invalid index {index}. Must be between 0 and {DataCount - 1}");
         }
     }
 }

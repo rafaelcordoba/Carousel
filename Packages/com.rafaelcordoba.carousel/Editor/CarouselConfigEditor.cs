@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using Carousel.Runtime;
 using UnityEditor;
 using UnityEngine;
@@ -10,7 +8,7 @@ namespace Carousel.Editor
     [CustomEditor(typeof(CarouselConfig))]
     public class CarouselConfigEditor : UnityEditor.Editor
     {
-        private IReadOnlyList<Carousel3D> _carouselsMatchingTarget;
+        private Carousel3D _carousel;
         private CarouselConfig _config;
 
         public override VisualElement CreateInspectorGUI()
@@ -23,9 +21,7 @@ namespace Carousel.Editor
         {
             EditorGUI.BeginChangeCheck();
             serializedObject.Update();
-
             DrawDefaultInspector();
-
             if (!EditorGUI.EndChangeCheck())
                 return;
 
@@ -35,14 +31,14 @@ namespace Carousel.Editor
             if (!Application.isPlaying)
                 return;
 
-            _carouselsMatchingTarget ??= FindObjectsOfType<Carousel3D>()
-                .Where(c => c.Config == _config).ToList();
-
-            foreach (var carousel in _carouselsMatchingTarget)
-            {
-                carousel.InitializeAnimator();
-                carousel.UpdateVisibleViews();
-            }
+            if (!_carousel)
+                _carousel = FindFirstObjectByType<Carousel3D>();
+            
+            if (!_carousel || _carousel.Config != _config)
+                return;
+            
+            _carousel.InitializeAnimator();
+            _carousel.UpdateVisibleViews();
         }
     }
 }

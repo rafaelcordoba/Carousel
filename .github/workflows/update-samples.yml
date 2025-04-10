@@ -39,8 +39,14 @@ jobs:
           mkdir -p Packages/com.rafaelcordoba.carousel/Samples~/BasicCarousel
           cp -r Assets/Carousel/* Packages/com.rafaelcordoba.carousel/Samples~/BasicCarousel/ || exit 1
           
+      - name: Commit samples changes
+        if: steps.changes.outputs.samples == 'true'
+        run: |
+          git add Packages/com.rafaelcordoba.carousel/Samples~
+          git commit -m "chore: update samples"
+
       - name: Bump version
-        if: steps.changes.outputs.package == 'true'
+        if: steps.changes.outputs.samples == 'true' || steps.changes.outputs.package == 'true'
         run: |
           # Get current version from package.json
           CURRENT_VERSION=$(grep -o '"version": "[^"]*"' Packages/com.rafaelcordoba.carousel/package.json | cut -d'"' -f4)
@@ -56,17 +62,12 @@ jobs:
           
           # Update version in package.json
           sed -i "s/\"version\": \"$CURRENT_VERSION\"/\"version\": \"$NEW_VERSION\"/" Packages/com.rafaelcordoba.carousel/package.json
-      
-      - name: Commit and push samples changes
-        if: steps.changes.outputs.samples == 'true'
-        run: |
-          git add Packages/com.rafaelcordoba.carousel/Samples~
-          git commit -m "chore: update samples"
-          git push
-
-      - name: Commit and push version bump
-        if: steps.changes.outputs.package == 'true'
-        run: |
+          
+          # Commit version bump
           git add Packages/com.rafaelcordoba.carousel/package.json
           git commit -m "chore: bump version to $NEW_VERSION"
+
+      - name: Push changes
+        if: steps.changes.outputs.samples == 'true' || steps.changes.outputs.package == 'true'
+        run: |
           git push
