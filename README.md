@@ -14,6 +14,9 @@ A customizable 3D carousel for Unity.
    https://github.com/rafaelcordoba/Carousel.git?path=Packages/com.rafaelcordoba.carousel
    ```
 5. Click "Add"
+6. In the Samples tab, download Basic Carousel
+
+![Package Manager](Documentation/package-manager.png)
 
 ## Documentation
 
