@@ -5,15 +5,15 @@ namespace Carousel.Samples.Data
 {
     public static class SampleDataExtensions
     {
-        public static List<CarouselItem> ToCarouselItems(this SampleData sampleData)
+        public static List<Item> ToCarouselItems(this SampleData sampleData)
         {
-            var itemViewModels = new List<CarouselItem>();
+            var itemViewModels = new List<Item>();
 
             foreach (var data in sampleData.Datas)
             {
                 var basicItemData = new BasicItemData(data.title, data.description);
                 var itemView = data.customPrefab ? data.customPrefab : sampleData.DefaultPrefab;
-                var carouselItem = new CarouselItem(itemView, basicItemData);
+                var carouselItem = new Item(itemView, basicItemData);
                 itemViewModels.Add(carouselItem);
             }
 
@@ -21,7 +21,7 @@ namespace Carousel.Samples.Data
             {
                 var iconItemData = new IconItemData(data.title, data.description, data.icon);
                 var itemView = data.customPrefab ? data.customPrefab : sampleData.DefaultPrefab;
-                var carouselItem = new CarouselItem(itemView, iconItemData);
+                var carouselItem = new Item(itemView, iconItemData);
                 itemViewModels.Add(carouselItem);
             }
 

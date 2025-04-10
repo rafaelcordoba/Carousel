@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Carousel.Samples
 {
-    public class SampleCarouselsPresenter : MonoBehaviour
+    public class CarouselLoader : MonoBehaviour
     {
         [SerializeField] private Transform container;
         
@@ -16,17 +16,27 @@ namespace Carousel.Samples
             _buttons = GetComponentsInChildren<LoadButton>();
             foreach (var button in _buttons) 
                 button.SetPresenter(this);
+
+            ForceClickFirstButton();
         }
 
-        public void LoadCarousel(CarouselConfig config, SampleData data)
+        private void ForceClickFirstButton()
+        {
+            if (_buttons is not { Length: > 0 }) 
+                return;
+            var firstButton = _buttons[0];
+            firstButton.OnButtonClicked();
+        }
+
+        public void LoadCarousel(Config config, SampleData data)
         {
             container.DestroyChildren();
             
             var go = new GameObject("Carousel");
-            var carousel = go.AddComponent<Carousel3D>();
+            var carousel = go.AddComponent<CarouselAnimated>();
             var items = data.ToCarouselItems();
             carousel.Initialize(config, items, 0);
-            go.AddComponent<SwipeInputHandler>().Initialize(carousel);
+            go.AddComponent<SwipeHandler>();
             go.transform.SetParent(container, false);
         }
     }

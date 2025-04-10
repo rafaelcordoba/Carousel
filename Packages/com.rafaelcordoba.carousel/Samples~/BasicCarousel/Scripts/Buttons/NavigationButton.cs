@@ -11,7 +11,7 @@ namespace Carousel.Samples.Buttons
         private enum NavigationType { Next, Previous, First, Last }
         [SerializeField] private NavigationType navigationType;
         
-        private Carousel3D _carousel;
+        private CarouselStatic _carousel;
         private Button _button;
 
         private void Awake()
@@ -28,7 +28,7 @@ namespace Carousel.Samples.Buttons
 
         private void OnClick()
         {
-            _carousel = FindObjectOfType<Carousel3D>();
+            _carousel = FindObjectOfType<CarouselStatic>();
             if (!_carousel)
             {
                 Debug.LogError("Carousel3D not found");

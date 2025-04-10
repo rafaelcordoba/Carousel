@@ -8,13 +8,13 @@ namespace Carousel.Samples.Buttons
     public class LoadButton : MonoBehaviour
     {
         [SerializeField] private Button button;
-        [SerializeField] private CarouselConfig config;
+        [SerializeField] private Config config;
         [SerializeField] private SampleData data;
-        private SampleCarouselsPresenter _presenter;
+        private CarouselLoader _presenter;
 
         private void Awake() => button.onClick.AddListener(OnButtonClicked);
         private void OnDestroy() => button.onClick.RemoveListener(OnButtonClicked);
-        private void OnButtonClicked() => _presenter.LoadCarousel(config, data);
-        public void SetPresenter(SampleCarouselsPresenter presenter) => _presenter = presenter;
+        public void OnButtonClicked() => _presenter.LoadCarousel(config, data);
+        public void SetPresenter(CarouselLoader presenter) => _presenter = presenter;
     }
 }
