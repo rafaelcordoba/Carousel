@@ -1,9 +1,9 @@
 using Carousel.Runtime;
-using Sample.Data;
+using Carousel.Samples.Data;
 using TMPro;
 using UnityEngine;
 
-namespace Sample
+namespace Carousel.Samples.View
 {
     public class SimpleItemView : AbstractItemView
     {

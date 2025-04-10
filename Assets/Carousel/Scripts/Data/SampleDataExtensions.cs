@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using Carousel.Runtime;
-using Sample.Data;
 
-namespace Sample
+namespace Carousel.Samples.Data
 {
     public static class SampleDataExtensions
     {

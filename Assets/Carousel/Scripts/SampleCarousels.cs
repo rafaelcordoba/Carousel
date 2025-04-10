@@ -1,7 +1,8 @@
 using Carousel.Runtime;
+using Carousel.Samples.Data;
 using UnityEngine;
 
-namespace Sample
+namespace Carousel.Samples
 {
     public class SampleCarousels : MonoBehaviour
     {

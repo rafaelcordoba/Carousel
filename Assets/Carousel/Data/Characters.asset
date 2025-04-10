@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 22a1dd7109ec4c77b31e7a736e2d3bfa, type: 3}
-  m_Name: Sample Data 1
+  m_Name: Characters
   m_EditorClassIdentifier: 
   defaultPrefab: {fileID: 4126015621156640197, guid: 6186350dbae8c49ddb7e8ed6d787bb27, type: 3}
   datas:

@@ -1,6 +1,6 @@
 using Carousel.Runtime;
 
-namespace Sample.Data
+namespace Carousel.Samples.Data
 {
     public class BasicItemData : IItemData
     {

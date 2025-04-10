@@ -1,6 +1,6 @@
 {
     "name": "carousel.editor",
-    "rootNamespace": "",
+    "rootNamespace": "Carousel",
     "references": [
         "carousel.runtime"
     ],

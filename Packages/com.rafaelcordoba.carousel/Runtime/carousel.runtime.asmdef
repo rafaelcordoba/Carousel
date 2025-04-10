@@ -1,6 +1,6 @@
 {
     "name": "carousel.runtime",
-    "rootNamespace": "",
+    "rootNamespace": "Carousel",
     "references": [
     ],
     "includePlatforms": [],

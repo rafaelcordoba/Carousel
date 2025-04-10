@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Sample.Data
+namespace Carousel.Samples.Data
 {
     public class IconItemData : BasicItemData
     {
