@@ -13,13 +13,29 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: Set up Git
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
 
+      - name: Check for changes in Assets/Carousel
+        id: check_changes
+        run: |
+          # Get the list of changed files in the last commit
+          CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
+          
+          # Check if any files in Assets/Carousel were changed
+          if echo "$CHANGED_FILES" | grep -q "^Assets/Carousel/"; then
+            echo "changes_detected=true" >> $GITHUB_OUTPUT
+          else
+            echo "changes_detected=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Copy samples
+        if: steps.check_changes.outputs.changes_detected == 'true'
         run: |
           mkdir -p Packages/com.rafaelcordoba.carousel/Samples~/BasicCarousel
           cp -r Assets/Carousel/* Packages/com.rafaelcordoba.carousel/Samples~/BasicCarousel/
@@ -46,5 +62,11 @@ jobs:
           
       - name: Commit changes
         run: |
-          git add Packages/com.rafaelcordoba.carousel/Samples~ Packages/com.rafaelcordoba.carousel/package.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "updating samples and bumping version to $NEW_VERSION" && git push) 
+          if [ "${{ steps.check_changes.outputs.changes_detected }}" == "true" ]; then
+            git add Packages/com.rafaelcordoba.carousel/Samples~ Packages/com.rafaelcordoba.carousel/package.json
+            git commit -m "updating samples and bumping version to $NEW_VERSION"
+          else
+            git add Packages/com.rafaelcordoba.carousel/package.json
+            git commit -m "bumping version to $NEW_VERSION"
+          fi
+          git push 
