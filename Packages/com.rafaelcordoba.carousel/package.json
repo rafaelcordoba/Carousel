@@ -14,9 +14,9 @@
   },
   "samples": [
     {
-      "displayName": "Basic Example",
-      "description": "Contains basic sample scene showing carousel functionality",
-      "path": "Samples~/BasicSample"
+      "displayName": "Basic Carousel",
+      "description": "Contains a sample scene showing carousel functionality",
+      "path": "Samples~/BasicCarousel"
     }
   ]
 }

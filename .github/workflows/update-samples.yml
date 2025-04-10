@@ -1,0 +1,48 @@
+name: Update Samples
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  update-samples:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+
+      - name: Copy samples
+        run: |
+          mkdir -p Packages/com.rafaelcordoba.carousel/Samples~/BasicCarousel
+          cp -r Assets/Carousel/* Packages/com.rafaelcordoba.carousel/Samples~/BasicCarousel/
+          
+      - name: Update package version
+        run: |
+          # Get current version from package.json
+          CURRENT_VERSION=$(grep -o '"version": "[^"]*"' Packages/com.rafaelcordoba.carousel/package.json | cut -d'"' -f4)
+          
+          # Split version into major, minor, and patch
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
+          
+          # Increment patch version
+          NEW_PATCH=$((PATCH + 1))
+          
+          # Create new version string
+          NEW_VERSION="$MAJOR.$MINOR.$NEW_PATCH"
+          
+          # Update version in package.json
+          sed -i "s/\"version\": \"$CURRENT_VERSION\"/\"version\": \"$NEW_VERSION\"/" Packages/com.rafaelcordoba.carousel/package.json
+          
+          # Output the new version for the commit message
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          
+      - name: Commit changes
+        run: |
+          git add Packages/com.rafaelcordoba.carousel/Samples~ Packages/com.rafaelcordoba.carousel/package.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "updating samples and bumping version to $NEW_VERSION" && git push) 
