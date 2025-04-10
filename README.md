@@ -11,7 +11,7 @@ A customizable 3D carousel for Unity.
 3. Select "Add package from git URL..."
 4. Enter the following URL:
    ```
-   https://github.com/rafaelcordoba/Carousel.git
+   https://github.com/rafaelcordoba/Carousel.git?path=Packages/com.rafaelcordoba.carousel
    ```
 5. Click "Add"
 
