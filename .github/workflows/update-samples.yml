@@ -36,7 +36,11 @@ jobs:
       - name: Copy samples
         if: steps.changes.outputs.samples == 'true'
         run: |
+          # Remove existing samples directory if it exists
+          rm -rf Packages/com.rafaelcordoba.carousel/Samples~/BasicCarousel
+          # Create fresh samples directory
           mkdir -p Packages/com.rafaelcordoba.carousel/Samples~/BasicCarousel
+          # Copy all files from Assets/Carousel
           cp -r Assets/Carousel/* Packages/com.rafaelcordoba.carousel/Samples~/BasicCarousel/ || exit 1
           
       - name: Commit samples changes
