@@ -15,18 +15,25 @@ A customizable 3D carousel for Unity.
    ```
 5. Click "Add"
 
-## Version Checking
-
-This package includes automatic version checking. When a new version is available, you'll receive a notification in the Unity Editor.
-
-To manually check for updates:
-1. Open the Package Manager
-2. Select the Carousel package
-3. Click the "Check for Updates" button
-
 ## Documentation
 
-For detailed documentation and examples, please visit the [GitHub repository](https://github.com/rafaelcordoba/Carousel).
+### Configurations
+- The config files are found in `Assets/Carousel/Configs`
+- While playing the game, you can change the configuration values in the inspector.
+- The changes can be seen immediately in the game to help you find the best values.
+- Make sure you have selected the config tha matches the loaded carousel.
+
+### Carousel Instantiation
+- [CarouselLoader](https://github.com/rafaelcordoba/Carousel/blob/main/Assets/Carousel/Scripts/CarouselLoader.cs) has a method called `LoadCarousel` that shows how instantiate a carousel.
+- You can choose between static or animated carousel.
+- You can also choose to add swipe gestures support or not.
+
+### Sample Data
+- The sample data is found in `Assets/Carousel/Data`
+- You have to choose a default prefab
+- You can also choose a custom prefab for each data item
+- For the sake of serialization simplicity, the different types of item views cannot be mixed, but they can be one after the other.
+- The carousel supports different item views intercalating with each other.
 
 ## License
 

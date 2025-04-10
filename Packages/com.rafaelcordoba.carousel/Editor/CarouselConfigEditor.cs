@@ -5,15 +5,15 @@ using UnityEngine.UIElements;
 
 namespace Carousel.Editor
 {
-    [CustomEditor(typeof(CarouselConfig))]
+    [CustomEditor(typeof(Config))]
     public class CarouselConfigEditor : UnityEditor.Editor
     {
-        private Carousel3D _carousel;
-        private CarouselConfig _config;
+        private CarouselStatic _carousel;
+        private Config _config;
 
         public override VisualElement CreateInspectorGUI()
         {
-            _config = (CarouselConfig)target;
+            _config = (Config)target;
             return base.CreateInspectorGUI();
         }
 
@@ -32,13 +32,12 @@ namespace Carousel.Editor
                 return;
 
             if (!_carousel)
-                _carousel = FindFirstObjectByType<Carousel3D>();
+                _carousel = FindFirstObjectByType<CarouselStatic>();
             
             if (!_carousel || _carousel.Config != _config)
                 return;
             
-            _carousel.InitializeAnimator();
-            _carousel.UpdateVisibleViews();
+            _carousel.Refresh();
         }
     }
 }

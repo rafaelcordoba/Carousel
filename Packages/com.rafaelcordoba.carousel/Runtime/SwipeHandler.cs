@@ -1,17 +1,26 @@
+using System;
 using UnityEngine;
 
 namespace Carousel.Runtime
 {
-    public class SwipeInputHandler : MonoBehaviour
+    [RequireComponent(typeof(CarouselStatic))]
+    public class SwipeHandler : MonoBehaviour
     {
         [SerializeField] private float swipeSensitivity = 0.003f;
         [SerializeField] private float minDistanceForSwipeWhileDragging = 0.7f;
         [SerializeField] private float minDistanceForSwipe = 0.5f;
-        private Carousel3D _carousel;
-
+        
+        private CarouselStatic _carousel;
         private bool _isDragging;
         private Vector2 _lastTouchPosition;
         private float _swipeDistance;
+
+        private void Awake()
+        {
+            _carousel = GetComponent<CarouselStatic>();
+            if (!_carousel)
+                throw new Exception("CarouselStatic component not found on the GameObject.");
+        }
 
         public void Update()
         {
@@ -24,11 +33,6 @@ namespace Carousel.Runtime
 #if UNITY_EDITOR
             HandleMouseInput();
 #endif
-        }
-
-        public void Initialize(Carousel3D carousel)
-        {
-            _carousel = carousel;
         }
 
         private void HandleTouchInput(Touch touch)
@@ -56,7 +60,8 @@ namespace Carousel.Runtime
                 StartDragging(Input.mousePosition);
             else if (Input.GetMouseButton(0) && _isDragging)
                 UpdateDragging(Input.mousePosition);
-            else if (Input.GetMouseButtonUp(0) && _isDragging) EndDragging();
+            else if (Input.GetMouseButtonUp(0) && _isDragging) 
+                EndDragging();
         }
 
         private void StartDragging(Vector2 position)

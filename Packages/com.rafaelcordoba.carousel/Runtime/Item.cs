@@ -1,8 +1,8 @@
 namespace Carousel.Runtime
 {
-    public class CarouselItem
+    public class Item
     {
-        public CarouselItem(AbstractItemView viewPrefab, IItemData itemData)
+        public Item(AbstractItemView viewPrefab, IItemData itemData)
         {
             ViewPrefab = viewPrefab;
             ItemData = itemData;

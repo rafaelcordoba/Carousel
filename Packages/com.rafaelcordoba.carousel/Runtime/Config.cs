@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace Carousel.Runtime
 {
-    [CreateAssetMenu(fileName = "CarouselConfig", menuName = "Carousel/New Configuration")]
-    public class CarouselConfig : ScriptableObject
+    [CreateAssetMenu(fileName = "New Carousel Configuration", menuName = "Carousel/New Configuration")]
+    public class Config : ScriptableObject
     {
         [Tooltip("How many items in the carousel.")] [Range(1, 2)]
         public int visibleItemsPerSide = 2;
