@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Carousel.Runtime;
+using Domain;
 
-namespace Carousel.Samples.Data
+namespace Samples.Data
 {
     public static class SampleDataExtensions
     {
@@ -12,16 +12,16 @@ namespace Carousel.Samples.Data
             foreach (var data in sampleData.Datas)
             {
                 var basicItemData = new BasicItemData(data.title, data.description);
-                var itemView = data.customPrefab ? data.customPrefab : sampleData.DefaultPrefab;
-                var carouselItem = new Item(itemView, basicItemData);
+                var prefab = data.customPrefab ? data.customPrefab : sampleData.DefaultPrefab;
+                var carouselItem = new Item(prefab.gameObject, basicItemData);
                 itemViewModels.Add(carouselItem);
             }
 
             foreach (var data in sampleData.DataIcons)
             {
                 var iconItemData = new IconItemData(data.title, data.description, data.icon);
-                var itemView = data.customPrefab ? data.customPrefab : sampleData.DefaultPrefab;
-                var carouselItem = new Item(itemView, iconItemData);
+                var prefab = data.customPrefab ? data.customPrefab : sampleData.DefaultPrefab;
+                var carouselItem = new Item(prefab.gameObject, iconItemData);
                 itemViewModels.Add(carouselItem);
             }
 

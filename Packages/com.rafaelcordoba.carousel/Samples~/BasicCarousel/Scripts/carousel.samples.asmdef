@@ -1,9 +1,11 @@
 {
     "name": "carousel.sample",
-    "rootNamespace": "Carousel.Samples",
+    "rootNamespace": "Samples",
     "references": [
         "Unity.TextMeshPro",
-        "carousel.runtime"
+        "carousel.runtime.presentation",
+        "carousel.runtime.domain",
+        "carousel.runtime.inputs"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

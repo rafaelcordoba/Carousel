@@ -1,6 +1,6 @@
-using Carousel.Runtime;
+using Domain;
 
-namespace Carousel.Samples.Data
+namespace Samples.Data
 {
     public class BasicItemData : IItemData
     {

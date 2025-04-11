@@ -1,9 +1,9 @@
-using Carousel.Runtime;
-using Carousel.Samples.Data;
+using Domain;
+using Samples.Data;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Carousel.Samples.Buttons
+namespace Samples.Buttons
 {
     public class LoadButton : MonoBehaviour
     {

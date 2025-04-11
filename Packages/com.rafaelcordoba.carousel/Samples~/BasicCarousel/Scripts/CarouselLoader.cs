@@ -1,9 +1,11 @@
-using Carousel.Runtime;
-using Carousel.Samples.Buttons;
-using Carousel.Samples.Data;
+using Domain;
+using Inputs;
+using Presentation;
+using Samples.Buttons;
+using Samples.Data;
 using UnityEngine;
 
-namespace Carousel.Samples
+namespace Samples
 {
     public class CarouselLoader : MonoBehaviour
     {
@@ -33,11 +35,17 @@ namespace Carousel.Samples
             container.DestroyChildren();
             
             var go = new GameObject("Carousel");
-            var carousel = go.AddComponent<CarouselAnimated>();
-            var items = data.ToCarouselItems();
-            carousel.Initialize(config, items, 0);
-            go.AddComponent<SwipeHandler>();
             go.transform.SetParent(container, false);
+            
+            var items = data.ToCarouselItems();
+            var carousel = new Carousel(config, items, 0);
+            
+            var viewAnimated = go.AddComponent<CarouselPresenterAnimated>();
+            viewAnimated.Initialize(carousel);
+            
+            var detector = FindFirstObjectByType<SwipeAndDragDetector>();
+            var inputListener = go.AddComponent<CarouselInputListener>();
+            inputListener.SetSwipeAndDragDetector(detector);
         }
     }
 }
