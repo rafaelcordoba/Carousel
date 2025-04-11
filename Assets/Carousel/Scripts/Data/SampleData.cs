@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Presentation;
 using UnityEngine;
 
-namespace Carousel.Samples.Data
+namespace Samples.Data
 {
     [CreateAssetMenu(fileName = "SampleData", menuName = "Carousel/New Sample Data")]
     public class SampleData : ScriptableObject

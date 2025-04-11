@@ -1,9 +1,9 @@
-using Carousel.Samples.Data;
 using Domain;
+using Samples.Data;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Carousel.Samples.View
+namespace Samples.View
 {
     public class IconItemView : SimpleItemView
     {

@@ -1,10 +1,10 @@
-using Carousel.Samples.Data;
 using Domain;
 using Presentation;
+using Samples.Data;
 using TMPro;
 using UnityEngine;
 
-namespace Carousel.Samples.View
+namespace Samples.View
 {
     public class SimpleItemView : AbstractItemView
     {

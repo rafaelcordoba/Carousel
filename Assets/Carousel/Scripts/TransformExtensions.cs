@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Carousel.Samples
+namespace Samples
 {
     public static  class TransformExtensions
     {

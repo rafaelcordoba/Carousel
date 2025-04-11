@@ -5,8 +5,6 @@ namespace Domain
 {
     public class Carousel : ICarouselSelect
     {
-        private int _selectedIndex;
-
         public Carousel(Config config, IReadOnlyList<Item> items, int selectedIndex)
         {
             Config = config;
@@ -16,20 +14,22 @@ namespace Domain
 
         public Config Config { get; }
         public IReadOnlyList<Item> Items { get; }
-        public int DataCount => Items.Count;
 
+        private int _selectedIndex;
         public int SelectedIndex
         {
             get => _selectedIndex;
             set
             {
+                SelectedIndexBeforeChange?.Invoke(_selectedIndex, value);
                 _selectedIndex = value;
-                OnSelectedIndexChanged?.Invoke(value);
+                SelectedIndexChanged?.Invoke(value);
             }
         }
 
-        public event Action<int> OnSelectedIndexChanged;
-        
+        public event Action<int, int> SelectedIndexBeforeChange;
+        public event Action<int> SelectedIndexChanged;
+
         public void First()
         {
             if (SelectedIndex > 0)
@@ -38,17 +38,17 @@ namespace Domain
         
         public void Last()
         {
-            if (SelectedIndex < DataCount - 1)
-                SelectedIndex = DataCount - 1;
+            if (SelectedIndex < Items.Count - 1)
+                SelectedIndex = Items.Count - 1;
         }
         
         public void Next()
         {
-            if (SelectedIndex < DataCount - 1)
+            if (SelectedIndex < Items.Count - 1)
                 SelectedIndex++;
         }
         
-        public void Previous()
+        public void Prev()
         {
             if (SelectedIndex > 0)
                 SelectedIndex--;
@@ -56,10 +56,13 @@ namespace Domain
 
         public void Select(int index)
         {
-            if (index < 0 || index >= DataCount)
+            if (!IsIndexValid(index))
                 throw new ArgumentOutOfRangeException(nameof(index), "Index is out of range.");
             
             SelectedIndex = index;
         }
+
+        public bool IsIndexValid(int index) 
+            => index >= 0 && index < Items.Count;
     }
 }

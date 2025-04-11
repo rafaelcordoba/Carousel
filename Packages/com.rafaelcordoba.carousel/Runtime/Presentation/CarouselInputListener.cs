@@ -6,10 +6,10 @@ namespace Presentation
     public class CarouselInputListener : MonoBehaviour 
     {
         private SwipeAndDragDetector _swipeAndDragDetector;
-        private CarouselViewStatic _carouselView;
+        private CarouselPresenter _carouselPresenter;
 
         private void Awake() => 
-            _carouselView = GetComponent<CarouselViewStatic>();
+            _carouselPresenter = GetComponent<CarouselPresenter>();
 
         public void SetSwipeAndDragDetector(SwipeAndDragDetector detector)
         {
@@ -27,9 +27,9 @@ namespace Presentation
         private void HandleDirection(Vector2 swipeDirection)
         {
             if (swipeDirection.x < 0)
-                _carouselView.Next();
+                _carouselPresenter.Model.Next();
             else
-                _carouselView.Prev();
+                _carouselPresenter.Model.Prev();
         }
     }
 }

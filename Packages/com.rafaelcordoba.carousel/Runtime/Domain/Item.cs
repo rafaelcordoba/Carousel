@@ -1,14 +1,16 @@
+using UnityEngine;
+
 namespace Domain
 {
     public class Item
     {
-        public Item(IItemView viewPrefab, IItemData itemData)
+        public Item(GameObject viewPrefab, IItemData itemData)
         {
             ViewPrefab = viewPrefab;
             ItemData = itemData;
         }
 
-        public IItemView ViewPrefab { get; }
+        public GameObject ViewPrefab { get; }
         public IItemData ItemData { get; }
     }
 }

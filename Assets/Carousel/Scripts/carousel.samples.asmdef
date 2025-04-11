@@ -1,6 +1,6 @@
 {
     "name": "carousel.sample",
-    "rootNamespace": "Carousel.Samples",
+    "rootNamespace": "Samples",
     "references": [
         "Unity.TextMeshPro",
         "carousel.runtime.presentation",

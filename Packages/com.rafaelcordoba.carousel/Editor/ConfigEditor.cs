@@ -9,7 +9,7 @@ namespace Carousel.Editor
     [CustomEditor(typeof(Config))]
     public class ConfigEditor : UnityEditor.Editor
     {
-        private CarouselViewStatic _carouselView;
+        private CarouselPresenter _presenter;
         private Config _config;
 
         public override VisualElement CreateInspectorGUI()
@@ -32,13 +32,13 @@ namespace Carousel.Editor
             if (!Application.isPlaying)
                 return;
 
-            if (!_carouselView)
-                _carouselView = FindFirstObjectByType<CarouselViewStatic>();
+            if (!_presenter)
+                _presenter = FindFirstObjectByType<CarouselPresenter>();
             
-            if (!_carouselView || _carouselView.Config != _config)
+            if (!_presenter || _presenter.Model.Config != _config)
                 return;
             
-            _carouselView.Refresh();
+            _presenter.RedrawAt(_presenter.Model.SelectedIndex);
         }
     }
 }
