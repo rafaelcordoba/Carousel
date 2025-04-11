@@ -18,9 +18,9 @@ namespace Carousel.Runtime
 
         public override void Select(int index)
         {
-            if (index >= 0 && index < DataCount && index != SelectedIndex)
+            if (IsIndexValid(index) && index != SelectedIndex)
                 StartAnimation(index);
-            else if (index < 0 || index >= DataCount) 
+            else if (!IsIndexValid(index))
                 Debug.LogError($"Invalid index {index}. Must be between 0 and {DataCount - 1}");
         }
 

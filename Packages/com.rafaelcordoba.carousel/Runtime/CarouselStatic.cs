@@ -55,13 +55,13 @@ namespace Carousel.Runtime
 
         public virtual void Select(int index)
         {
-            if (index >= 0 && index < DataCount && index != SelectedIndex)
+            if (IsIndexValid(index) && index != SelectedIndex)
             {
                 SelectedIndex = index;
                 UpdateVisibleViews();
                 PositionItems(index);
             }
-            else if (index < 0 || index >= DataCount)
+            else if (!IsIndexValid(index))
                 Debug.LogError($"Invalid index {index}. Must be between 0 and {DataCount - 1}");
         }
 
@@ -155,6 +155,8 @@ namespace Carousel.Runtime
 
             ReorderSiblings(Mathf.RoundToInt(centerIndex), visibleItemViews);
         }
+
+        protected bool IsIndexValid(int index) => index >= 0 && index < DataCount;
 
         private (float minVisibleIndex, float maxVisibleIndex) CalculateVisibleIndexRange(float centerIndex)
         {
