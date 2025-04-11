@@ -15,6 +15,8 @@ namespace Carousel.Runtime
         private Vector2 _lastTouchPosition;
         private float _swipeDistance;
 
+        private enum InputState { None, Began, Moved, Ended }
+
         private void Awake()
         {
             _carousel = GetComponent<CarouselStatic>();
@@ -27,42 +29,91 @@ namespace Carousel.Runtime
             if (!_carousel)
                 return;
 
-            if (Input.touchCount > 0)
-                HandleTouchInput(Input.GetTouch(0));
+            var (currentState, currentPosition) = GetInputStateAndPosition();
 
-#if UNITY_EDITOR
-            HandleMouseInput();
-#endif
-        }
-
-        private void HandleTouchInput(Touch touch)
-        {
-            switch (touch.phase)
+            switch (currentState)
             {
-                case TouchPhase.Began:
-                    StartDragging(touch.position);
+                case InputState.Began:
+                    StartDragging(currentPosition);
                     break;
-
-                case TouchPhase.Moved:
-                    if (_isDragging) UpdateDragging(touch.position);
+                case InputState.Moved:
+                    if (_isDragging) 
+                        UpdateDragging(currentPosition);
                     break;
-
-                case TouchPhase.Ended:
-                case TouchPhase.Canceled:
-                    EndDragging();
+                case InputState.Ended:
+                    if (_isDragging) 
+                        EndDragging();
                     break;
+                case InputState.None:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
-        private void HandleMouseInput()
+        private (InputState state, Vector2 position) GetInputStateAndPosition()
         {
-            if (Input.GetMouseButtonDown(0))
-                StartDragging(Input.mousePosition);
-            else if (Input.GetMouseButton(0) && _isDragging)
-                UpdateDragging(Input.mousePosition);
-            else if (Input.GetMouseButtonUp(0) && _isDragging) 
-                EndDragging();
+            if (TryGetTouchInput(out var currentState, out var currentPosition))
+            {
+                return (currentState, currentPosition);
+            }
+
+#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL 
+            return TryGetMouseInput(out currentState, out currentPosition) ? 
+                (currentState, currentPosition) : 
+                (InputState.None, Vector2.zero);
+#endif
         }
+
+        private static bool TryGetTouchInput(out InputState state, out Vector2 position)
+        {
+            state = InputState.None;
+            position = Vector2.zero;
+
+            if (Input.touchCount <= 0) 
+                return false;
+            
+            var touch = Input.GetTouch(0);
+            position = touch.position;
+            state = touch.phase switch
+            {
+                TouchPhase.Began => InputState.Began,
+                TouchPhase.Moved => InputState.Moved,
+                TouchPhase.Ended or TouchPhase.Canceled => InputState.Ended,
+                _ => state
+            };
+            return true;
+        }
+
+#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBGL
+        private static bool TryGetMouseInput(out InputState state, out Vector2 position)
+        {
+            state = InputState.None;
+            position = Vector2.zero;
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                state = InputState.Began;
+                position = Input.mousePosition;
+                return true;
+            }
+
+            if (Input.GetMouseButton(0))
+            {
+                state = InputState.Moved;
+                position = Input.mousePosition;
+                return true;
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                state = InputState.Ended;
+                return true;
+            }
+
+            return false; 
+        }
+#endif
 
         private void StartDragging(Vector2 position)
         {
