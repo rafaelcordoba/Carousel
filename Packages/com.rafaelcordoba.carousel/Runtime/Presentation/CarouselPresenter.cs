@@ -95,6 +95,8 @@ namespace Presentation
 
             var item = Model.Items[index];
             var poolObject = _pooling.Get(item.ViewPrefab);
+            _poolObjects[index] = poolObject;
+            
             var itemView = poolObject.Instance.GetComponent<AbstractItemView>();
             itemView.transform.SetParent(transform);
             itemView.transform.localPosition = Vector3.zero;
@@ -102,7 +104,6 @@ namespace Presentation
             itemView.transform.localScale = Vector3.one;
             itemView.Initialize(index, item.ItemData, Model);
             poolObject.Instance.SetActive(true); 
-            _poolObjects[index] = poolObject;
             return itemView;
         }
 
