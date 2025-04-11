@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 namespace Carousel.Editor
 {
     [CustomEditor(typeof(Config))]
-    public class CarouselConfigEditor : UnityEditor.Editor
+    public class ConfigEditor : UnityEditor.Editor
     {
         private CarouselStatic _carousel;
         private Config _config;
