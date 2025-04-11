@@ -8,7 +8,7 @@ namespace Carousel.Runtime
             ItemData = itemData;
         }
 
-        public AbstractItemView ViewPrefab { get; set; }
-        public IItemData ItemData { get; set; }
+        public AbstractItemView ViewPrefab { get; }
+        public IItemData ItemData { get; }
     }
 }

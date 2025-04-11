@@ -1,6 +1,6 @@
 namespace Carousel.Runtime
 {
-    public interface ICarouselInputHandler
+    public interface ICarouselSelect
     {
         void Select(int index);
     }

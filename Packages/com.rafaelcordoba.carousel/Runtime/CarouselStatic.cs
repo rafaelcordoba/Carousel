@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace Carousel.Runtime
 {
-    public class CarouselStatic : MonoBehaviour, ICarouselInputHandler
+    public class CarouselStatic : MonoBehaviour, ICarouselSelect
     {
-        private readonly Dictionary<int, AbstractItemView> _activeViews = new();
+        private readonly Dictionary<int, PoolObject> _poolObjects = new();
         private readonly HashSet<int> _visibleIndices = new();
         private IReadOnlyList<Item> _items = new List<Item>();
         private readonly List<AbstractItemView> _activeItemViews = new();
@@ -17,8 +17,11 @@ namespace Carousel.Runtime
         public int SelectedIndex { get; protected set; }
         public int DataCount => _items.Count;
 
-        private void Awake() => _pooling = new PrefabPooling();
-        private void OnDestroy() => _pooling.Dispose();
+        private void Awake() => 
+            _pooling = new PrefabPooling();
+        
+        private void OnDestroy() => 
+            _pooling.Dispose();
 
         public void Initialize(Config config, IReadOnlyList<Item> items, int selectedIndex)
         {
@@ -147,14 +150,14 @@ namespace Carousel.Runtime
 
         private void ReturnObsoleteViews()
         {
-            var indicesToRemove = _activeViews.Keys.Except(_visibleIndices).ToList();
+            var indicesToRemove = _poolObjects.Keys.Except(_visibleIndices).ToList();
             foreach (var index in indicesToRemove)
             {
-                if (_activeViews.TryGetValue(index, out var view) && view)
-                {
-                    _pooling.Return(new PoolObject(view.ViewPrefab, view.gameObject));
-                    _activeViews.Remove(index);
-                }
+                if (!_poolObjects.TryGetValue(index, out var poolObject)) 
+                    continue;
+                
+                _pooling.Return(poolObject);
+                _poolObjects.Remove(index);
             }
         }
 
@@ -171,17 +174,16 @@ namespace Carousel.Runtime
 
         private AbstractItemView GetOrCreateView(int index)
         {
-            if (_activeViews.TryGetValue(index, out var itemView) && itemView)
-                return itemView;
+            if (_poolObjects.TryGetValue(index, out var po))
+                return po.Instance.GetComponent<AbstractItemView>();
 
             var item = _items[index];
             var poolObject = _pooling.Get(item.ViewPrefab.gameObject);
-            itemView = poolObject.Instance.GetComponent<AbstractItemView>();
-            itemView.ViewPrefab = item.ViewPrefab.gameObject; 
+            var itemView = poolObject.Instance.GetComponent<AbstractItemView>();
             itemView.transform.SetParent(transform);
             itemView.Initialize(index, item.ItemData, this);
             poolObject.Instance.SetActive(true); 
-            _activeViews[index] = itemView;
+            _poolObjects[index] = poolObject;
             return itemView;
         }
 

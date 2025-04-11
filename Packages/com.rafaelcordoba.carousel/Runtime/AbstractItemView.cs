@@ -6,16 +6,15 @@ namespace Carousel.Runtime
     public abstract class AbstractItemView : MonoBehaviour, IPointerClickHandler
     {
         public int ItemIndex { get; private set; }
-        public GameObject ViewPrefab { get; set; }
-        private ICarouselInputHandler _carouselInputHandler;
+        private ICarouselSelect _carouselSelect;
 
         public void OnPointerClick(PointerEventData eventData) => 
-            _carouselInputHandler?.Select(ItemIndex);
+            _carouselSelect?.Select(ItemIndex);
 
-        public void Initialize(int index, IItemData itemData, ICarouselInputHandler inputHandler)
+        public void Initialize(int index, IItemData itemData, ICarouselSelect select)
         {
             ItemIndex = index;
-            _carouselInputHandler = inputHandler;
+            _carouselSelect = select;
             OnInitialize(itemData);
         }
 
