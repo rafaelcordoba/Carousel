@@ -26,45 +26,19 @@ namespace Domain
                 
                 var previousIndex = _selectedIndex;
                 _selectedIndex = value;
-                OnSelectedIndexChanged(previousIndex, _selectedIndex);
+                SelectedIndexChanged?.Invoke(previousIndex, _selectedIndex);
             }
         }
 
         public event Action<int, int> SelectedIndexChanged;
 
-        protected virtual void OnSelectedIndexChanged(int fromIndex, int toIndex)
-        {
-            SelectedIndexChanged?.Invoke(fromIndex, toIndex);
-        }
+        public void First() => Select(0);
+        public void Last() => Select(Items.Count - 1);
+        public void Next() => Select((SelectedIndex + 1) % Items.Count);
+        public void Prev() => Select((SelectedIndex - 1 + Items.Count) % Items.Count);
+        public void Select(int index) => SelectedIndex = index;
 
-        public void First()
-        {
-            Select(0);
-        }
-
-        public void Last()
-        {
-            Select(Items.Count - 1);
-        }
-
-        public void Next()
-        {
-            int nextIndex = (SelectedIndex + 1) % Items.Count;
-            Select(nextIndex);
-        }
-
-        public void Prev()
-        {
-            int prevIndex = (SelectedIndex - 1 + Items.Count) % Items.Count;
-            Select(prevIndex);
-        }
-
-        public void Select(int index)
-        {
-            SelectedIndex = index;
-        }
-
-        public bool IsIndexValid(int index)
+        private bool IsIndexValid(int index)
             => index >= 0 && index < Items.Count;
     }
 }
