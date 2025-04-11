@@ -38,7 +38,7 @@ namespace Carousel.Samples.Buttons
             Action action = navigationType switch
             {
                 NavigationType.Next => _carousel.Next,
-                NavigationType.Previous => _carousel.Previous,
+                NavigationType.Previous => _carousel.Prev,
                 NavigationType.First => _carousel.First,
                 NavigationType.Last => _carousel.Last,
                 _ => throw new ArgumentOutOfRangeException(nameof(navigationType))

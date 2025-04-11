@@ -10,7 +10,8 @@
   "licensesUrl": "https://github.com/rafaelcordoba/Carousel/blob/master/LICENSE.md",
   "category": "UI",
   "dependencies": {
-    "com.unity.textmeshpro": "3.0.7"
+    "com.unity.textmeshpro": "3.0.7",
+    "com.unity.inputsystem": "1.11.2"
   },
   "samples": [
     {

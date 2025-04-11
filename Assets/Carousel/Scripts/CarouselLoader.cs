@@ -33,11 +33,17 @@ namespace Carousel.Samples
             container.DestroyChildren();
             
             var go = new GameObject("Carousel");
-            var carousel = go.AddComponent<CarouselAnimated>();
-            var items = data.ToCarouselItems();
-            carousel.Initialize(config, items, 0);
-            go.AddComponent<SwipeHandler>();
             go.transform.SetParent(container, false);
+            
+            var items = data.ToCarouselItems();
+            var carousel = go.AddComponent<CarouselAnimated>();
+            carousel.Initialize(config, items, 0);
+            
+            var detector = FindFirstObjectByType<SwipeAndDragDetector>();
+            var inputListener = go.AddComponent<CarouselInputListener>();
+            inputListener.SetSwipeAndDragDetector(detector);
+            
+            
         }
     }
 }

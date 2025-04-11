@@ -2,6 +2,7 @@
     "name": "carousel.runtime",
     "rootNamespace": "Carousel",
     "references": [
+        "Unity.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

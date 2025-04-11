@@ -38,7 +38,7 @@ namespace Carousel.Runtime
                 Select(SelectedIndex + 1);
         }
 
-        public void Previous()
+        public void Prev()
         {
             if (SelectedIndex > 0)
                 Select(SelectedIndex - 1);
