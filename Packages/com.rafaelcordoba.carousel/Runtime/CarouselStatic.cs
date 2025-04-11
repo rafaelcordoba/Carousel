@@ -10,9 +10,9 @@ namespace Carousel.Runtime
         private readonly Dictionary<int, AbstractItemView> _activeViews = new();
         private readonly HashSet<int> _visibleIndices = new();
         private IReadOnlyList<Item> _items = new List<Item>();
+        private readonly List<AbstractItemView> _activeItemViews = new();
         private PrefabPooling _pooling;
 
-        public List<AbstractItemView> ItemViews { get; } = new();
         public Config Config { get; private set; }
         public int SelectedIndex { get; protected set; }
         public int DataCount => _items.Count;
@@ -71,113 +71,129 @@ namespace Carousel.Runtime
             UpdateVisibleViews();
         }
 
-        public void UpdateVisibleViews(float? animatedCenterIndex = null)
-        {
-            var centerIndex = animatedCenterIndex ?? SelectedIndex;
-            var (minVisibleIndex, maxVisibleIndex) = CalculateVisibleIndexRange(centerIndex);
-
-            // Calculate which indices should be visible
-            _visibleIndices.Clear();
-            for (var i = Mathf.FloorToInt(minVisibleIndex); i <= Mathf.CeilToInt(maxVisibleIndex); i++)
-                if (i >= 0 && i < DataCount)
-                    _visibleIndices.Add(i);
-
-            // Remove views that are no longer visible
-            var indicesToRemove = new List<int>();
-            foreach (var kvp in _activeViews)
-                if (!_visibleIndices.Contains(kvp.Key))
-                    indicesToRemove.Add(kvp.Key);
-
-            foreach (var index in indicesToRemove)
-            {
-                var view = _activeViews[index];
-                _pooling.Return(new PoolObject(view.ViewPrefab, view.gameObject));
-                _activeViews.Remove(index);
-            }
-
-            // Create or update views for visible indices
-            ItemViews.Clear();
-            foreach (var index in _visibleIndices)
-            {
-                if (!_activeViews.TryGetValue(index, out var itemView))
-                {
-                    var item = _items[index];
-                    var poolObject = _pooling.Get(item.ViewPrefab.gameObject);
-                    itemView = poolObject.Instance.GetComponent<AbstractItemView>();
-                    itemView.ViewPrefab = item.ViewPrefab.gameObject;
-                    itemView.transform.SetParent(transform);
-                    itemView.Initialize(index, item.ItemData, this);
-                    _activeViews[index] = itemView;
-                }
-
-                ItemViews.Add(itemView);
-            }
-        }
-
         protected void PositionItems(float centerIndex)
         {
-            var itemViews = ItemViews;
-            var (minVisibleIndex, maxVisibleIndex) = CalculateVisibleIndexRange(centerIndex);
-
+            var (minVisibleIndex, maxVisibleIndex) = GetVisibleIndexRange(centerIndex);
             var visibleItemViews = new List<AbstractItemView>();
 
-            foreach (var itemView in itemViews)
+            foreach (var itemView in _activeItemViews)
             {
-                var item = itemView.gameObject;
-                if (!item)
+                var isVisible = UpdateItemVisibility(itemView, minVisibleIndex, maxVisibleIndex);
+                if (!isVisible) 
                     continue;
-
-                var offsetFromCenter = itemView.ItemIndex - centerIndex;
-                var isVisible = itemView.ItemIndex >= Mathf.Floor(minVisibleIndex) &&
-                                itemView.ItemIndex <= Mathf.Ceil(maxVisibleIndex);
-                item.SetActive(isVisible);
-
-                if (!isVisible)
-                    continue;
-
-                // Position
-                var xPos = offsetFromCenter * Config.horizontalSpacing;
-                var zPos = Mathf.Abs(offsetFromCenter) * Config.zOffsetStep;
-                item.transform.localPosition = new Vector3(xPos, 0f, zPos);
-
-                // Rotation
-                var yRot = -offsetFromCenter * Config.rotationYStep;
-                item.transform.localRotation = Quaternion.Euler(0f, yRot, 0f);
-
-                // Scale
-                var scaleFactor = Mathf.Clamp01(1.0f - Mathf.Abs(offsetFromCenter));
-                var scale = Mathf.Lerp(Config.sideScale, 1.0f, scaleFactor);
-                item.transform.localScale = Vector3.one * scale;
-
-                // Add to list for reordering
+                
+                ApplyItemTransform(itemView, centerIndex);
                 visibleItemViews.Add(itemView);
             }
 
             ReorderSiblings(Mathf.RoundToInt(centerIndex), visibleItemViews);
         }
 
-        protected bool IsIndexValid(int index) => index >= 0 && index < DataCount;
-
-        private (float minVisibleIndex, float maxVisibleIndex) CalculateVisibleIndexRange(float centerIndex)
+        private static bool UpdateItemVisibility(AbstractItemView itemView, float minVisibleIndex, float maxVisibleIndex)
         {
-            var config = Config;
-            var minVisibleIndex = centerIndex - config.visibleItemsPerSide;
-            var maxVisibleIndex = centerIndex + config.visibleItemsPerSide;
-            return (minVisibleIndex, maxVisibleIndex);
+            var isVisible = itemView.ItemIndex >= Mathf.Floor(minVisibleIndex) &&
+                            itemView.ItemIndex <= Mathf.Ceil(maxVisibleIndex);
+            itemView.gameObject.SetActive(isVisible);
+            return isVisible;
+        }
+        
+        private void ApplyItemTransform(AbstractItemView itemView, float centerIndex)
+        {
+            var itemGameObject = itemView.gameObject;
+            var offsetFromCenter = itemView.ItemIndex - centerIndex;
+
+            // Position
+            var xPos = offsetFromCenter * Config.horizontalSpacing;
+            var zPos = Mathf.Abs(offsetFromCenter) * Config.zOffsetStep;
+            itemGameObject.transform.localPosition = new Vector3(xPos, 0f, zPos);
+
+            // Rotation
+            var yRot = -offsetFromCenter * Config.rotationYStep;
+            itemGameObject.transform.localRotation = Quaternion.Euler(0f, yRot, 0f);
+
+            // Scale
+            var scaleFactor = 1.0f - Mathf.Clamp01(Mathf.Abs(offsetFromCenter) / Config.visibleItemsPerSide);
+            var scale = Mathf.Lerp(Config.sideScale, 1.0f, scaleFactor);
+            itemGameObject.transform.localScale = Vector3.one * scale;
         }
 
         private static void ReorderSiblings(int centerIndex, List<AbstractItemView> itemViews)
         {
-            // Sort siblings by their distance from center, with the center item first
             var sortedItems = itemViews
                 .OrderBy(item => Mathf.Abs(item.ItemIndex - centerIndex))
                 .ThenBy(item => item.ItemIndex)
                 .ToList();
 
-            // Set sibling indices in reverse order so that center item is at the top
             for (var i = 0; i < sortedItems.Count; i++)
-                // Reverse the index so that the center item (first in sortedItems) gets the highest index
                 sortedItems[i].transform.SetSiblingIndex(sortedItems.Count - 1 - i);
+        }
+
+        protected void UpdateVisibleViews(float? animatedCenterIndex = null)
+        {
+            var centerIndex = animatedCenterIndex ?? SelectedIndex;
+            CalculateVisibleIndices(centerIndex);
+            ReturnObsoleteViews();
+            CreateAndActivateVisibleViews();
+        }
+
+        private void CalculateVisibleIndices(float centerIndex)
+        {
+            var (minVisibleIndex, maxVisibleIndex) = GetVisibleIndexRange(centerIndex);
+            _visibleIndices.Clear();
+            for (var i = Mathf.FloorToInt(minVisibleIndex); i <= Mathf.CeilToInt(maxVisibleIndex); i++)
+                if (IsIndexValid(i)) 
+                    _visibleIndices.Add(i);
+        }
+
+        private void ReturnObsoleteViews()
+        {
+            var indicesToRemove = _activeViews.Keys.Except(_visibleIndices).ToList();
+            foreach (var index in indicesToRemove)
+            {
+                if (_activeViews.TryGetValue(index, out var view) && view)
+                {
+                    _pooling.Return(new PoolObject(view.ViewPrefab, view.gameObject));
+                    _activeViews.Remove(index);
+                }
+            }
+        }
+
+        private void CreateAndActivateVisibleViews()
+        {
+            _activeItemViews.Clear();
+            foreach (var index in _visibleIndices)
+            {
+                var itemView = GetOrCreateView(index);
+                if (itemView) 
+                    _activeItemViews.Add(itemView);
+            }
+        }
+
+        private AbstractItemView GetOrCreateView(int index)
+        {
+            if (_activeViews.TryGetValue(index, out var itemView) && itemView)
+                return itemView;
+
+            var item = _items[index];
+            var poolObject = _pooling.Get(item.ViewPrefab.gameObject);
+            itemView = poolObject.Instance.GetComponent<AbstractItemView>();
+            itemView.ViewPrefab = item.ViewPrefab.gameObject; 
+            itemView.transform.SetParent(transform);
+            itemView.Initialize(index, item.ItemData, this);
+            poolObject.Instance.SetActive(true); 
+            _activeViews[index] = itemView;
+            return itemView;
+        }
+
+        protected bool IsIndexValid(int index) 
+            => index >= 0 && index < DataCount;
+
+        private (float minVisibleIndex, float maxVisibleIndex) GetVisibleIndexRange(float centerIndex)
+        {
+            var config = Config;
+            var minVisibleIndex = centerIndex - config.visibleItemsPerSide;
+            var maxVisibleIndex = centerIndex + config.visibleItemsPerSide;
+            return (minVisibleIndex, maxVisibleIndex);
         }
     }
 }
