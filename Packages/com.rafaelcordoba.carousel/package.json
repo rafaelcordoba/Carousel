@@ -2,7 +2,7 @@
   "name": "com.rafaelcordoba.carousel",
   "displayName": "Carousels",
   "author": { "name": "Rafael Cordoba", "url": "http://rafaelcordoba.com/" },
-  "version": "1.0.7",
+  "version": "1.0.8",
   "unity": "2018.4",
   "description": "A simple carousel implementation for Unity.",
   "keywords": [ "ui", "carousel", "component" ],
