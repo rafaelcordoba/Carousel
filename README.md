@@ -34,7 +34,7 @@ A customizable 3D carousel for Unity.
 - Make sure you have selected the config tha matches the loaded carousel.
 
 ### Carousel Instantiation
-- [CarouselLoader](https://github.com/rafaelcordoba/Carousel/blob/main/Assets/Carousel/Scripts/CarouselLoader.cs) has a method called `LoadCarousel` that shows how instantiate a carousel.
+- [CarouselLoader](https://github.com/rafaelcordoba/Carousel/blob/master/Assets/Carousel/Scripts/CarouselLoader.cs) has a method called `LoadCarousel` that shows how instantiate a carousel.
 - You can choose between static or animated carousel.
 - You can also choose to add swipe gestures support or not.
 
