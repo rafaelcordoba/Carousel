@@ -1,9 +1,10 @@
+using Domain;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Carousel.Runtime
+namespace Presentation
 {
-    public abstract class AbstractItemView : MonoBehaviour, IPointerClickHandler
+    public abstract class AbstractItemView : MonoBehaviour, IPointerClickHandler, IItemView
     {
         public int ItemIndex { get; private set; }
         private ICarouselSelect _carouselSelect;
@@ -17,6 +18,8 @@ namespace Carousel.Runtime
             _carouselSelect = select;
             OnInitialize(itemData);
         }
+
+        public GameObject GameObject => gameObject;
 
         protected abstract void OnInitialize(IItemData itemData);
     }

@@ -1,8 +1,8 @@
 using UnityEngine;
 
-namespace Carousel.Runtime
+namespace Presentation
 {
-    public class CarouselAnimated : CarouselStatic
+    public class CarouselViewAnimated : CarouselViewStatic
     {
         private float _animationProgress = 1f;
         private int _animationStartIndex;

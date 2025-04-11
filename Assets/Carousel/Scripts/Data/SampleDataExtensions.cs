@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Carousel.Runtime;
+using Domain;
 
 namespace Carousel.Samples.Data
 {

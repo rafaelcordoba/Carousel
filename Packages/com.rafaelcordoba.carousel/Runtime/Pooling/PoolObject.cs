@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Carousel.Runtime.Pooling
+namespace Pooling
 {
     public class PoolObject
     {

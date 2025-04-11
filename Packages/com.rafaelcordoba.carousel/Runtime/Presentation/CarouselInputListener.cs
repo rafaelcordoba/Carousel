@@ -1,14 +1,15 @@
+using Inputs;
 using UnityEngine;
 
-namespace Carousel.Runtime
+namespace Presentation
 {
     public class CarouselInputListener : MonoBehaviour 
     {
         private SwipeAndDragDetector _swipeAndDragDetector;
-        private CarouselStatic _carousel;
+        private CarouselViewStatic _carouselView;
 
         private void Awake() => 
-            _carousel = GetComponent<CarouselStatic>();
+            _carouselView = GetComponent<CarouselViewStatic>();
 
         public void SetSwipeAndDragDetector(SwipeAndDragDetector detector)
         {
@@ -26,9 +27,9 @@ namespace Carousel.Runtime
         private void HandleDirection(Vector2 swipeDirection)
         {
             if (swipeDirection.x < 0)
-                _carousel.Next();
+                _carouselView.Next();
             else
-                _carousel.Prev();
+                _carouselView.Prev();
         }
     }
 }

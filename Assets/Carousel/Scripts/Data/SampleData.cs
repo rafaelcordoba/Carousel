@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Carousel.Runtime;
+using Presentation;
 using UnityEngine;
 
 namespace Carousel.Samples.Data

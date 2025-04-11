@@ -1,4 +1,5 @@
-using Carousel.Runtime;
+using Domain;
+using Presentation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -8,7 +9,7 @@ namespace Carousel.Editor
     [CustomEditor(typeof(Config))]
     public class ConfigEditor : UnityEditor.Editor
     {
-        private CarouselStatic _carousel;
+        private CarouselViewStatic _carouselView;
         private Config _config;
 
         public override VisualElement CreateInspectorGUI()
@@ -31,13 +32,13 @@ namespace Carousel.Editor
             if (!Application.isPlaying)
                 return;
 
-            if (!_carousel)
-                _carousel = FindFirstObjectByType<CarouselStatic>();
+            if (!_carouselView)
+                _carouselView = FindFirstObjectByType<CarouselViewStatic>();
             
-            if (!_carousel || _carousel.Config != _config)
+            if (!_carouselView || _carouselView.Config != _config)
                 return;
             
-            _carousel.Refresh();
+            _carouselView.Refresh();
         }
     }
 }

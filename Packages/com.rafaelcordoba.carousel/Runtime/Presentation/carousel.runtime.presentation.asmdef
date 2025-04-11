@@ -1,8 +1,10 @@
 {
-    "name": "carousel.runtime",
-    "rootNamespace": "Carousel",
+    "name": "carousel.runtime.presentation",
+    "rootNamespace": "",
     "references": [
-        "Unity.InputSystem"
+        "GUID:c191459956d7424bb088e14f6d290438",
+        "GUID:1a9d9eb97de34508b1a3b7a49e06532f",
+        "GUID:de0dc2520fd146bc9650548054da85ea"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

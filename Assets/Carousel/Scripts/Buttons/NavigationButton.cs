@@ -1,5 +1,5 @@
 using System;
-using Carousel.Runtime;
+using Presentation;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +11,7 @@ namespace Carousel.Samples.Buttons
         private enum NavigationType { Next, Previous, First, Last }
         [SerializeField] private NavigationType navigationType;
         
-        private CarouselStatic _carousel;
+        private CarouselViewStatic _carouselView;
         private Button _button;
 
         private void Awake()
@@ -28,8 +28,8 @@ namespace Carousel.Samples.Buttons
 
         private void OnClick()
         {
-            _carousel = FindObjectOfType<CarouselStatic>();
-            if (!_carousel)
+            _carouselView = FindObjectOfType<CarouselViewStatic>();
+            if (!_carouselView)
             {
                 Debug.LogError("Carousel3D not found");
                 return;
@@ -37,10 +37,10 @@ namespace Carousel.Samples.Buttons
             
             Action action = navigationType switch
             {
-                NavigationType.Next => _carousel.Next,
-                NavigationType.Previous => _carousel.Prev,
-                NavigationType.First => _carousel.First,
-                NavigationType.Last => _carousel.Last,
+                NavigationType.Next => _carouselView.Next,
+                NavigationType.Previous => _carouselView.Prev,
+                NavigationType.First => _carouselView.First,
+                NavigationType.Last => _carouselView.Last,
                 _ => throw new ArgumentOutOfRangeException(nameof(navigationType))
             };
             action();

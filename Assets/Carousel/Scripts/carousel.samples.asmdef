@@ -3,7 +3,9 @@
     "rootNamespace": "Carousel.Samples",
     "references": [
         "Unity.TextMeshPro",
-        "carousel.runtime"
+        "carousel.runtime.presentation",
+        "carousel.runtime.domain",
+        "carousel.runtime.inputs"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -1,5 +1,5 @@
-using Carousel.Runtime;
 using Carousel.Samples.Data;
+using Domain;
 using UnityEngine;
 using UnityEngine.UI;
 

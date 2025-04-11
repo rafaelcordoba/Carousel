@@ -1,5 +1,6 @@
-using Carousel.Runtime;
 using Carousel.Samples.Data;
+using Domain;
+using Presentation;
 using TMPro;
 using UnityEngine;
 

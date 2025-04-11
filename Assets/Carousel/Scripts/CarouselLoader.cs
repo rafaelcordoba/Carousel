@@ -1,6 +1,8 @@
-using Carousel.Runtime;
 using Carousel.Samples.Buttons;
 using Carousel.Samples.Data;
+using Domain;
+using Inputs;
+using Presentation;
 using UnityEngine;
 
 namespace Carousel.Samples
@@ -36,7 +38,7 @@ namespace Carousel.Samples
             go.transform.SetParent(container, false);
             
             var items = data.ToCarouselItems();
-            var carousel = go.AddComponent<CarouselAnimated>();
+            var carousel = go.AddComponent<CarouselViewAnimated>();
             carousel.Initialize(config, items, 0);
             
             var detector = FindFirstObjectByType<SwipeAndDragDetector>();

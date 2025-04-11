@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 
-namespace Carousel.Runtime
+namespace Inputs
 {
     [RequireComponent(typeof(PlayerInput))]
     public class SwipeAndDragDetector : MonoBehaviour
@@ -21,7 +21,6 @@ namespace Carousel.Runtime
         private Vector2 _currentPosition;
         private float _startTime;
         private bool _isDragging;
-        private bool _hasReachedMinDragDistance;
     
         private InputAction _touchPositionAction;
         private InputAction _touchPressAction;
@@ -56,20 +55,17 @@ namespace Carousel.Runtime
     
         private void Update()
         {
-            if (_isDragging)
-            {
-                _currentPosition = _touchPositionAction.ReadValue<Vector2>();
-                Vector2 dragDelta = _currentPosition - _startPosition;
-                float dragDistance = dragDelta.magnitude;
+            if (!_isDragging) 
+                return;
+            
+            _currentPosition = _touchPositionAction.ReadValue<Vector2>();
+            var dragDelta = _currentPosition - _startPosition;
+            var dragDistance = dragDelta.magnitude;
+
+            if (!(dragDistance >= minDragDistance)) 
+                return;
                 
-                // Check if we've reached the minimum drag distance
-                if (dragDistance >= minDragDistance)
-                {
-                    _hasReachedMinDragDistance = true;
-                    _onDragging?.Invoke(dragDelta);
-                    // Debug.Log("Dragging " + dragDelta);
-                }
-            }
+            _onDragging?.Invoke(dragDelta);
         }
     
         private void OnTouchStarted(InputAction.CallbackContext context)
@@ -78,7 +74,6 @@ namespace Carousel.Runtime
             _currentPosition = _startPosition;
             _startTime = Time.time;
             _isDragging = true;
-            _hasReachedMinDragDistance = false;
         }
     
         private void OnTouchEnded(InputAction.CallbackContext context)
@@ -91,11 +86,8 @@ namespace Carousel.Runtime
             var swipeDistance = swipeDirection.magnitude;
             var swipeTime = Time.time - _startTime;
         
-            if (swipeDistance >= minSwipeDistance && swipeTime <= maxSwipeTime)
-            {
+            if (swipeDistance >= minSwipeDistance && swipeTime <= maxSwipeTime) 
                 _onSwipe?.Invoke(swipeDirection);
-                // Debug.Log($"Swipe {swipeDirection}");
-            }
         }
     }
 }

@@ -1,4 +1,4 @@
-namespace Carousel.Runtime
+namespace Domain
 {
     public interface IItemData
     {

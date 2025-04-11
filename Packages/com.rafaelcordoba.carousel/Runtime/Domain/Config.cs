@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Carousel.Runtime
+namespace Domain
 {
     [CreateAssetMenu(fileName = "New Carousel Configuration", menuName = "Carousel/New Configuration")]
     public class Config : ScriptableObject

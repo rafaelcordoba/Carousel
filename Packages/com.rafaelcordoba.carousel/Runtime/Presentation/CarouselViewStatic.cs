@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
-using Carousel.Runtime.Pooling;
+using Domain;
+using Pooling;
 using UnityEngine;
 
-namespace Carousel.Runtime
+namespace Presentation
 {
-    public class CarouselStatic : MonoBehaviour, ICarouselSelect
+    public class CarouselViewStatic : MonoBehaviour, ICarouselSelect
     {
         private readonly Dictionary<int, PoolObject> _poolObjects = new();
         private readonly HashSet<int> _visibleIndices = new();
@@ -178,7 +179,7 @@ namespace Carousel.Runtime
                 return po.Instance.GetComponent<AbstractItemView>();
 
             var item = _items[index];
-            var poolObject = _pooling.Get(item.ViewPrefab.gameObject);
+            var poolObject = _pooling.Get(item.ViewPrefab.GameObject);
             var itemView = poolObject.Instance.GetComponent<AbstractItemView>();
             itemView.transform.SetParent(transform);
             itemView.Initialize(index, item.ItemData, this);

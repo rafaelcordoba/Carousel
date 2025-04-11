@@ -1,14 +1,14 @@
-namespace Carousel.Runtime
+namespace Domain
 {
     public class Item
     {
-        public Item(AbstractItemView viewPrefab, IItemData itemData)
+        public Item(IItemView viewPrefab, IItemData itemData)
         {
             ViewPrefab = viewPrefab;
             ItemData = itemData;
         }
 
-        public AbstractItemView ViewPrefab { get; }
+        public IItemView ViewPrefab { get; }
         public IItemData ItemData { get; }
     }
 }

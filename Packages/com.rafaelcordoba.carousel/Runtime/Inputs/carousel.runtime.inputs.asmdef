@@ -1,10 +1,10 @@
 {
-    "name": "carousel.editor",
-    "rootNamespace": "Carousel",
-    "references": ["GUID:1a9d9eb97de34508b1a3b7a49e06532f","GUID:8b04530e21f64f21a969129ab3cc9220"],
-    "includePlatforms": [
-        "Editor"
+    "name": "carousel.runtime.inputs",
+    "rootNamespace": "",
+    "references": [
+        "GUID:75469ad4d38634e559750d17036d5f7c"
     ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

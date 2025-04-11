@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Carousel.Runtime.Pooling
+namespace Pooling
 {
     public class PrefabPooling : IDisposable
     {
