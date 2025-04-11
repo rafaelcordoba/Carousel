@@ -120,15 +120,13 @@ namespace Presentation
             foreach (var itemView in _activeItemViews)
             {
                 var itemIndex = itemView.ItemIndex;
-                var delta = centerIndex - itemIndex;
-                var virtualIndex = itemIndex + Mathf.Round((centerIndex - itemIndex) / (float)itemCount) * itemCount;
+                var virtualIndex = itemIndex + Mathf.Round((centerIndex - itemIndex) / itemCount) * itemCount;
 
                 itemView.ApplyItemTransform(Model.Config, centerIndex, virtualIndex);
                 itemViewsToSort.Add(itemView);
             }
 
-            itemViewsToSort.ReorderSiblings(Mathf.RoundToInt(centerIndex));
+            itemViewsToSort.ReorderSiblings(Mathf.RoundToInt(centerIndex), itemCount);
         }
-
     }
 }
