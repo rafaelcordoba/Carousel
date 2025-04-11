@@ -12,7 +12,7 @@ namespace Inputs
         [SerializeField] private float minSwipeDistance = 50f;
         [SerializeField] private float minDragDistance = 50f;
         [SerializeField] private float maxSwipeTime = 0.5f;
-        [SerializeField] private float maxDragInterval = 1.0f; // Maximum time between drag events
+        [SerializeField] private float maxDragInterval = 1.0f;
     
         [Header("Events")]
         private UnityEvent<Vector2> _onSwipe;
@@ -22,7 +22,7 @@ namespace Inputs
         private Vector2 _currentPosition;
         private float _startTime;
         private bool _isDragging;
-        private float _lastDragTime; // Track the last time a drag event was published
+        private float _lastDragTime;
     
         private InputAction _touchPositionAction;
         private InputAction _touchPressAction;
@@ -67,7 +67,6 @@ namespace Inputs
             if (!(dragDistance >= minDragDistance)) 
                 return;
                 
-            // Check if enough time has passed since the last drag event
             var currentTime = Time.time;
             if (currentTime - _lastDragTime >= maxDragInterval)
             {
@@ -81,7 +80,7 @@ namespace Inputs
             _startPosition = _touchPositionAction.ReadValue<Vector2>();
             _currentPosition = _startPosition;
             _startTime = Time.time;
-            _lastDragTime = _startTime; // Initialize the last drag time
+            _lastDragTime = _startTime;
             _isDragging = true;
         }
     
