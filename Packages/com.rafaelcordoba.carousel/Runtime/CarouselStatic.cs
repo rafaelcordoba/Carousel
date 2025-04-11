@@ -73,10 +73,8 @@ namespace Carousel.Runtime
 
         public void UpdateVisibleViews(float? animatedCenterIndex = null)
         {
-            var config = Config;
             var centerIndex = animatedCenterIndex ?? SelectedIndex;
-            var minVisibleIndex = centerIndex - config.visibleItemsPerSide;
-            var maxVisibleIndex = centerIndex + config.visibleItemsPerSide;
+            var (minVisibleIndex, maxVisibleIndex) = CalculateVisibleIndexRange(centerIndex);
 
             // Calculate which indices should be visible
             _visibleIndices.Clear();
@@ -118,10 +116,8 @@ namespace Carousel.Runtime
 
         protected void PositionItems(float centerIndex)
         {
-            var config = Config;
             var itemViews = ItemViews;
-            var minVisibleIndex = centerIndex - config.visibleItemsPerSide;
-            var maxVisibleIndex = centerIndex + config.visibleItemsPerSide;
+            var (minVisibleIndex, maxVisibleIndex) = CalculateVisibleIndexRange(centerIndex);
 
             var visibleItemViews = new List<AbstractItemView>();
 
@@ -140,17 +136,17 @@ namespace Carousel.Runtime
                     continue;
 
                 // Position
-                var xPos = offsetFromCenter * config.horizontalSpacing;
-                var zPos = Mathf.Abs(offsetFromCenter) * config.zOffsetStep;
+                var xPos = offsetFromCenter * Config.horizontalSpacing;
+                var zPos = Mathf.Abs(offsetFromCenter) * Config.zOffsetStep;
                 item.transform.localPosition = new Vector3(xPos, 0f, zPos);
 
                 // Rotation
-                var yRot = -offsetFromCenter * config.rotationYStep;
+                var yRot = -offsetFromCenter * Config.rotationYStep;
                 item.transform.localRotation = Quaternion.Euler(0f, yRot, 0f);
 
                 // Scale
                 var scaleFactor = Mathf.Clamp01(1.0f - Mathf.Abs(offsetFromCenter));
-                var scale = Mathf.Lerp(config.sideScale, 1.0f, scaleFactor);
+                var scale = Mathf.Lerp(Config.sideScale, 1.0f, scaleFactor);
                 item.transform.localScale = Vector3.one * scale;
 
                 // Add to list for reordering
@@ -158,6 +154,14 @@ namespace Carousel.Runtime
             }
 
             ReorderSiblings(Mathf.RoundToInt(centerIndex), visibleItemViews);
+        }
+
+        private (float minVisibleIndex, float maxVisibleIndex) CalculateVisibleIndexRange(float centerIndex)
+        {
+            var config = Config;
+            var minVisibleIndex = centerIndex - config.visibleItemsPerSide;
+            var maxVisibleIndex = centerIndex + config.visibleItemsPerSide;
+            return (minVisibleIndex, maxVisibleIndex);
         }
 
         private static void ReorderSiblings(int centerIndex, List<AbstractItemView> itemViews)
