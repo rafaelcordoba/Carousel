@@ -22,7 +22,7 @@ namespace Samples.Buttons
 
         private void OnDestroy()
         {
-            if (_button != null)
+            if (_button)
                 _button.onClick.RemoveListener(OnClick);
         }
 

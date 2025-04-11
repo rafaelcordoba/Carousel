@@ -6,7 +6,7 @@ namespace Samples
     {
         public static void DestroyChildren(this Transform transform)
         {
-            foreach (object child in transform)
+            foreach (var child in transform)
             {
                 Object.Destroy(((Transform) child).gameObject);
             }
