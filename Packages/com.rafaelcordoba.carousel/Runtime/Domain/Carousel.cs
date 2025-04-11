@@ -24,11 +24,8 @@ namespace Domain
                 if (!IsIndexValid(value))
                     throw new ArgumentOutOfRangeException(nameof(value), "Index is out of range.");
                 
-                // Store the previous value for event notification.
-                int previousIndex = _selectedIndex;
-                
+                var previousIndex = _selectedIndex;
                 _selectedIndex = value;
-                // Simply notify that the index changed.
                 OnSelectedIndexChanged(previousIndex, _selectedIndex);
             }
         }
