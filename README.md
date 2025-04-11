@@ -6,7 +6,8 @@ A customizable 3D carousel for Unity.
 
 ### Via Git URL
 
-1. Open the Package Manager in Unity (Window > Package Manager)
+1. This approach is for using the package in a Unity project
+2. Open the Package Manager in Unity (Window > Package Manager)
 2. Click the "+" button in the top-left corner
 3. Select "Add package from git URL..."
 4. Enter the following URL:
@@ -17,6 +18,12 @@ A customizable 3D carousel for Unity.
 6. In the Samples tab, download Basic Carousel
 
 ![Package Manager](Documentation/package-manager.png)
+
+### Via Git Checkout
+
+1. This approach is for developing the package
+2. `git clone https://github.com/rafaelcordoba/Carousel.git`
+3. Open the Unity project
 
 ## Documentation
 
@@ -37,6 +44,11 @@ A customizable 3D carousel for Unity.
 - You can also choose a custom prefab for each data item
 - For the sake of serialization simplicity, the different types of item views cannot be mixed, but they can be one after the other.
 - The carousel supports different item views intercalating with each other.
+
+## Automation
+### GitHub Actions
+- The project uses GitHub Actions to automate copying sample assets to the package Samples~ folder
+- This is required so Unity can show the samples in the Package Manager while allowing the samples to be worked in this repository
 
 ## License
 
