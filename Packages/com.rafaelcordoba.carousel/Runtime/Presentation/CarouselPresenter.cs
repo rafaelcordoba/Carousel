@@ -22,22 +22,18 @@ namespace Presentation
             _pooling.Dispose();
             if (Model == null) 
                 return;
-            Model.SelectedIndexBeforeChange -= OnSelectedIndexBeforeChanged;
             Model.SelectedIndexChanged -= OnSelectedIndexChanged;
         }
 
         public void Initialize(Carousel carousel)
         {
             Model = carousel;
-            Model.SelectedIndexBeforeChange += OnSelectedIndexBeforeChanged;
             Model.SelectedIndexChanged += OnSelectedIndexChanged;
             RedrawAt(Model.SelectedIndex);
         }
-        
-        protected virtual void OnSelectedIndexBeforeChanged(int before, int after) {}
 
-        private void OnSelectedIndexChanged(int index) => 
-            RedrawAt(index);
+        protected virtual void OnSelectedIndexChanged(int fromIndex, int toIndex) => 
+            RedrawAt(toIndex);
 
         public void RedrawAt(float centerIndex)
         {
@@ -52,8 +48,16 @@ namespace Presentation
             var (minVisibleIndex, maxVisibleIndex) = GetVisibleIndexRange(centerIndex);
             _visibleIndices.Clear();
             for (var i = Mathf.FloorToInt(minVisibleIndex); i <= Mathf.CeilToInt(maxVisibleIndex); i++)
-                if (Model.IsIndexValid(i)) 
-                    _visibleIndices.Add(i);
+            {
+                if (Model.Items.Count > 0)
+                    _visibleIndices.Add(GetWrappedIndex(i));
+            }
+        }
+
+        private int GetWrappedIndex(int index)
+        {
+            var count = Model.Items.Count;
+            return (index % count + count) % count;
         }
 
         private (float minVisibleIndex, float maxVisibleIndex) GetVisibleIndexRange(float centerIndex)
@@ -109,23 +113,39 @@ namespace Presentation
 
         private void PositionItems(float centerIndex)
         {
-            var (minVisibleIndex, maxVisibleIndex) = GetVisibleIndexRange(centerIndex);
-            var itemViews = new List<AbstractItemView>();
+            var itemViewsToSort = new List<AbstractItemView>();
+            int itemCount = Model.Items.Count;
+            if (itemCount == 0) return; // Handle empty case
 
             foreach (var itemView in _activeItemViews)
             {
-                var isVisible = itemView.ItemIndex >= Mathf.Floor(minVisibleIndex) &&
-                                 itemView.ItemIndex <= Mathf.Ceil(maxVisibleIndex);
-                itemView.gameObject.SetActive(isVisible);
-                
-                if (!isVisible) 
-                    continue;
-                
-                itemView.ApplyItemTransform(Model.Config, centerIndex);
-                itemViews.Add(itemView);
+                int itemIndex = itemView.ItemIndex;
+
+                // --- New Virtual Index Calculation ---
+                // Calculate the difference in indices.
+                float delta = centerIndex - itemIndex;
+
+                // Calculate the difference modulo itemCount to find the shortest path distance
+                // This gives a value between -itemCount/2 and +itemCount/2
+                // Example: center=0.5, item=9, count=10 => delta = 0.5 - 9 = -8.5
+                // shortestDelta = -1.5 (because -8.5 mod 10, adjusted to nearest)
+                // Example: center=9.5, item=1, count=10 => delta = 9.5 - 1 = 8.5
+                // shortestDelta = -1.5 (because 8.5 mod 10, adjusted to nearest)
+                float shortestDelta = delta - Mathf.Round(delta / itemCount) * itemCount;
+
+                // The virtual index is the item's actual index plus the number of wraps needed
+                // Alternatively, and perhaps simpler: calculate the virtual index that is *closest*
+                // to the current centerIndex.
+                float virtualIndex = itemIndex + Mathf.Round((centerIndex - itemIndex) / (float)itemCount) * itemCount;
+                //--------------------------------------
+
+                itemView.ApplyItemTransform(Model.Config, centerIndex, virtualIndex);
+                itemViewsToSort.Add(itemView);
             }
 
-            itemViews.ReorderSiblings(Mathf.RoundToInt(centerIndex));
+            // Reordering might still be useful for handling transparency/overlap correctly
+            itemViewsToSort.ReorderSiblings(Mathf.RoundToInt(centerIndex));
         }
+
     }
 }

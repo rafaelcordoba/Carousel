@@ -78,4 +78,4 @@ MonoBehaviour:
   minSwipeDistance: 50
   minDragDistance: 50
   maxSwipeTime: 0.5
-  maxDragInterval: 0.1
+  maxDragInterval: 0

@@ -21,48 +21,53 @@ namespace Domain
             get => _selectedIndex;
             set
             {
-                SelectedIndexBeforeChange?.Invoke(_selectedIndex, value);
+                if (!IsIndexValid(value))
+                    throw new ArgumentOutOfRangeException(nameof(value), "Index is out of range.");
+                
+                // Store the previous value for event notification.
+                int previousIndex = _selectedIndex;
+                
                 _selectedIndex = value;
-                SelectedIndexChanged?.Invoke(value);
+                // Simply notify that the index changed.
+                OnSelectedIndexChanged(previousIndex, _selectedIndex);
             }
         }
 
-        public event Action<int, int> SelectedIndexBeforeChange;
-        public event Action<int> SelectedIndexChanged;
+        public event Action<int, int> SelectedIndexChanged;
+
+        protected virtual void OnSelectedIndexChanged(int fromIndex, int toIndex)
+        {
+            SelectedIndexChanged?.Invoke(fromIndex, toIndex);
+        }
 
         public void First()
         {
-            if (SelectedIndex > 0)
-                SelectedIndex = 0;
+            Select(0);
         }
-        
+
         public void Last()
         {
-            if (SelectedIndex < Items.Count - 1)
-                SelectedIndex = Items.Count - 1;
+            Select(Items.Count - 1);
         }
-        
+
         public void Next()
         {
-            if (SelectedIndex < Items.Count - 1)
-                SelectedIndex++;
+            int nextIndex = (SelectedIndex + 1) % Items.Count;
+            Select(nextIndex);
         }
-        
+
         public void Prev()
         {
-            if (SelectedIndex > 0)
-                SelectedIndex--;
+            int prevIndex = (SelectedIndex - 1 + Items.Count) % Items.Count;
+            Select(prevIndex);
         }
 
         public void Select(int index)
         {
-            if (!IsIndexValid(index))
-                throw new ArgumentOutOfRangeException(nameof(index), "Index is out of range.");
-            
             SelectedIndex = index;
         }
 
-        public bool IsIndexValid(int index) 
+        public bool IsIndexValid(int index)
             => index >= 0 && index < Items.Count;
     }
 }

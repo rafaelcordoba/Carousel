@@ -23,9 +23,9 @@ namespace Presentation
 
         protected abstract void OnInitialize(IItemData itemData);
         
-        public void ApplyItemTransform(Config config, float centerIndex)
+        public void ApplyItemTransform(Config config, float centerIndex, float virtualIndex)
         {
-            var offsetFromCenter = ItemIndex - centerIndex;
+            var offsetFromCenter = virtualIndex - centerIndex;
 
             // Position
             var xPos = offsetFromCenter * config.horizontalSpacing;
